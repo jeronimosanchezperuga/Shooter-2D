@@ -8,21 +8,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpForce;
     [SerializeField] Rigidbody2D rb;
     [SerializeField] Animator anim;
-    [SerializeField] float circleCheckRadius;
-    [SerializeField] LayerMask whatIsGround;
-    [SerializeField] bool isGrounded;
+    [SerializeField] GroundCheck groundCheck;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        groundCheck = GetComponent<GroundCheck>();
     }
 
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && groundCheck.isGrounded)
         {
             Saltar();
         }
@@ -30,8 +29,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapCircle(transform.position, circleCheckRadius, whatIsGround);
-
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
@@ -52,18 +49,15 @@ public class PlayerController : MonoBehaviour
     void Saltar()
     {
         
-        if (isGrounded)
+        if (groundCheck.isGrounded)
         {
             Debug.Log("Suelo");
             rb.AddForce(Vector2.up * jumpForce,ForceMode2D.Impulse);
         }
-        Debug.Log("No Suelo");
+        else
+        {
+            Debug.Log("No Suelo");
+        }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-    //Use the same vars you use to draw your Overlap SPhere to draw your Wire Sphere.
-    Gizmos.DrawWireSphere(transform.position + transform.position, circleCheckRadius);
-    }
 }
