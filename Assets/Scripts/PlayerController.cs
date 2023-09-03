@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && groundCheck.isGrounded)
+        if (Input.GetKeyDown(KeyCode.W) && groundCheck.isGrounded)
         {
             Saltar();
         }
