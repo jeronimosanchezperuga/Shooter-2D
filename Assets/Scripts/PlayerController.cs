@@ -41,7 +41,10 @@ public class PlayerController : MonoBehaviour
             transform.eulerAngles = Vector3.zero;
         }
 
-        anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+        if (groundCheck.isGrounded)
+        {
+            anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+        }
         //rb.MovePosition(rb.position + new Vector2(x, y) * speed);
         rb.velocity = new Vector2(x * speed, rb.velocity.y) ;
     }
@@ -53,6 +56,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Suelo");
             rb.AddForce(Vector2.up * jumpForce,ForceMode2D.Impulse);
+            anim.SetTrigger("Jump");
         }
         else
         {
