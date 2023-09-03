@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
         groundCheck = GetComponent<GroundCheck>();
     }
 
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && groundCheck.isGrounded)
@@ -32,11 +31,11 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
-        if (x < 0)
+        if (x < -0.1f)
         {
             transform.eulerAngles = Vector3.up * 180;
         }
-        else
+        else if (x > 0.1f) 
         {
             transform.eulerAngles = Vector3.zero;
         }
@@ -44,24 +43,21 @@ public class PlayerController : MonoBehaviour
         if (groundCheck.isGrounded)
         {
             anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
-        }
-        //rb.MovePosition(rb.position + new Vector2(x, y) * speed);
-        rb.velocity = new Vector2(x * speed, rb.velocity.y) ;
-    }
-
-    void Saltar()
-    {
-        
-        if (groundCheck.isGrounded)
-        {
-            Debug.Log("Suelo");
-            rb.AddForce(Vector2.up * jumpForce,ForceMode2D.Impulse);
-            anim.SetTrigger("Jump");
+            anim.SetBool("Jump",false);
         }
         else
         {
-            Debug.Log("No Suelo");
+            anim.SetBool("Jump", true);
         }
+        rb.velocity = new Vector2(x * speed, rb.velocity.y) ;
+        
     }
 
+    void Saltar()
+    {        
+        if (groundCheck.isGrounded)
+        {
+            rb.AddForce(Vector2.up * jumpForce,ForceMode2D.Impulse);            
+        }
+    }
 }
